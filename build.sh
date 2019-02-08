@@ -21,6 +21,8 @@ cat > target/build.json << EOF
 }
 EOF
 
+export PACKAGE_DIRECTORY=build
+
 cd function-audio-generator
 npm install
 npm run package
