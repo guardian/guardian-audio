@@ -1,0 +1,9 @@
+*/node_modules
+*/node_modules.env
+*/.env
+*/deploy.env
+*/event.json
+*/event_sources.json
+*/context.json
+*/.lambda
+.vscode

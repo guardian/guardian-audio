@@ -1,0 +1,26 @@
+{
+  "name": "guardian-audio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dry-run": "node-lambda run",
+    "deploy": "node-lambda deploy --configFile deploy.env",
+    "setup": "node-lambda setup",
+    "package": "node-lambda package",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "node-lambda": "^0.12.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.323.0",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2",
+    "sanitize-html": "^1.19.3",
+    "ssml-validator": "^0.1.0"
+  }
+}
