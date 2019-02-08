@@ -22,6 +22,7 @@ cat > target/build.json << EOF
 EOF
 
 cd function-audio-generator
+npm run install
 npm run package
 cd ..
 cp function-audio-generator/build/* target/packages/function-audio-generator/function-audio-generator.zip
