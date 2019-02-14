@@ -29,7 +29,7 @@ npm run package
 cd ..
 cp function-audio-generator/build/* target/packages/function-audio-generator/function-audio-generator.zip
 
-# cp cloudformation/discussion-notifications.yaml target/cfn/cfn.yaml
+cp cloudformation/cfn.yaml target/packages/guardian-audio-cfn/cfn.yaml
 
 aws s3 cp --acl bucket-owner-full-control --region=eu-west-1 --recursive target/packages s3://riffraff-artifact/$PROJECT/$BUILD_NUMBER
 aws s3 cp --acl bucket-owner-full-control --region=eu-west-1 target/build.json s3://riffraff-builds/$PROJECT/$BUILD_NUMBER/build.json
