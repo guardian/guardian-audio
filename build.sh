@@ -6,6 +6,7 @@ rm -rf function-audio-generator/build
 
 rm -rf target
 mkdir -p target/packages/function-audio-generator
+mkdir -p target/packages/function-audio-generator-cfn
 
 PROJECT="mobile:guardian-audio"
 BUILD_START_DATE=$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ")
@@ -29,7 +30,7 @@ npm run package
 cd ..
 cp function-audio-generator/build/* target/packages/function-audio-generator/function-audio-generator.zip
 
-cp cfn.yaml target/packages/guardian-audio-cfn/cfn.yaml
+cp cfn.yaml target/packages/function-audio-generator-cfn/cfn.yaml
 cp riff-raff.yaml target/packages/
 
 aws s3 cp --acl bucket-owner-full-control --region=eu-west-1 --recursive target/packages s3://riffraff-artifact/$PROJECT/$BUILD_NUMBER
