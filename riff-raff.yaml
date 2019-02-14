@@ -9,7 +9,7 @@ deployments:
       functionNames: [guardian-audio-]
       fileName: function-audio-generator.zip
       prefixStack: false
-    dependencies: [guardian-audio-cfn]
+    dependencies: [function-audio-generator-cfn]
   function-audio-generator-cfn:
     type: cloud-formation
     app: guardian-audio
