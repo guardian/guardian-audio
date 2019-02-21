@@ -63,7 +63,7 @@ Resources:
           Stack: !Ref Stack
           App: !Ref App
       Description: Guardian Audio Lambda
-      Handler: com.gu.guardianaudio.Lambda::handler
+      Handler: handler
       MemorySize: 128
       Role: !GetAtt ExecutionRole.Arn
       Runtime: nodejs8.10
