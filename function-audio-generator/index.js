@@ -5,12 +5,12 @@ const sanitizeHtml = require('sanitize-html')
 const ssmlValidator = require('ssml-validator')
 
 const MAPI_HOME_FRONT_URL = 'https://mobile.guardianapis.com/uk/fronts/home'
-const CAPI_API_KEY = 'TODO'
+// const CAPI_API_KEY = 'TODO'
 const SNS_TOPIC = 'TODO'
 const BUCKET_NAME = 'TODO'
 const CAPI_FIELDS = 'headline,body'
 const CAPI_PAGE_SIZE = 50
-const CAPI_URL = `https://content.guardianapis.com/search?show-fields=${CAPI_FIELDS}&page-size=${CAPI_PAGE_SIZE}&api-key=${CAPI_API_KEY}`
+const CAPI_URL = `https://content.guardianapis.com/search?show-fields=${CAPI_FIELDS}&page-size=${CAPI_PAGE_SIZE}&api-key=`
 
 const DB_TABLE_NAME = 'guardian-audio'
 
@@ -30,12 +30,27 @@ const REGEX_PARA_END = /<\/p>/gm
 
 const aws = require('aws-sdk')
 const polly = new aws.Polly({signatureVersion: 'v4', region: 'eu-west-1'})
-const dbClient = new aws.DynamoDB.DocumentClient({apiVersion: '2012-10-08', region: 'eu-west-1'});
+const dbClient = new aws.DynamoDB.DocumentClient({region: 'eu-west-1'});
+const ssm = new aws.SSM({region: 'eu-west-1'})
 
 
-exports.handler = (event, context, callback) => {
+exports.handler = async (event, context, callback) => {
     console.log('starting polly ops', event)
-    generate()    
+
+    var params = {
+        Name: '/mobile/guardian-audio/CODE/capi.key',
+        WithDecryption: true
+      };
+
+      ssm.getParameter(params, function(err, data) {
+        if (err) console.log(err, err.stack); // an error occurred
+        else{
+            console.log(data);           // successful response
+            let capiUrl = CAPI_URL + data.Parameter.Value
+            generate(capiUrl)
+        }     
+      });
+
 
     // TEST
     // const item = await getTestItem()
@@ -44,8 +59,8 @@ exports.handler = (event, context, callback) => {
     // TEST end
 }
 
-async function generate() {
-    const data = await request.get({uri: CAPI_URL, json: true})
+async function generate(url) {
+    const data = await request.get({uri: url, json: true})
 
     for(const item of data.response.results) {
         const audioExist = await audioAlreadyGenerated(item.id)
