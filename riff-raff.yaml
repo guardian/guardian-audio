@@ -2,18 +2,18 @@ stacks: [content-api-mobile]
 regions: [eu-west-1]
 
 deployments:
-  guardian-audio:
+  function-audio-generator:
     type: aws-lambda
     parameters:
       bucket: content-api-dist
-      functionNames: [guardian-audio-]
+      functionNames: [function-audio-generator-]
       fileName: function-audio-generator.zip
       prefixStack: false
     dependencies: [function-audio-generator-cfn]
   function-audio-generator-cfn:
     type: cloud-formation
-    app: guardian-audio
+    app: function-audio-generator
     parameters:
       prependStackToCloudFormationStackName: false
-      cloudFormationStackName: guardian-audio
+      cloudFormationStackName: mobile-function-audio-generator
       templatePath: cfn.yaml
