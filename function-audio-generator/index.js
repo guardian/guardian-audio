@@ -5,7 +5,6 @@ const sanitizeHtml = require('sanitize-html')
 const ssmlValidator = require('ssml-validator')
 
 const MAPI_HOME_FRONT_URL = 'https://mobile.guardianapis.com/uk/fronts/home'
-// const CAPI_API_KEY = 'TODO'
 const SNS_TOPIC = 'TODO'
 const BUCKET_NAME = 'TODO'
 const CAPI_FIELDS = 'headline,body'
@@ -33,25 +32,25 @@ const polly = new aws.Polly({signatureVersion: 'v4', region: 'eu-west-1'})
 const dbClient = new aws.DynamoDB.DocumentClient({region: 'eu-west-1'});
 const ssm = new aws.SSM({region: 'eu-west-1'})
 
+const ENV = 'CODE'
+const PARAM_PATH = '/mobile/guardian-audio/' + ENV
+const KEY_CAPI_KEY = PARAM_PATH + '/capi.key'
+var paramater_store = null
+
 
 exports.handler = async (event, context, callback) => {
     console.log('starting polly ops', event)
 
-    var params = {
-        Name: '/mobile/guardian-audio/CODE/capi.key',
-        WithDecryption: true
-      };
-
-      ssm.getParameter(params, function(err, data) {
-        if (err) console.log(err, err.stack); // an error occurred
-        else{
-            console.log(data);           // successful response
-            let capiUrl = CAPI_URL + data.Parameter.Value
-            generate(capiUrl)
-        }     
-      });
-
-
+    var success = await fetchParameterStore()
+    if(success) {
+        let capi_key = getParam(KEY_CAPI_KEY)
+        let capiUrl = CAPI_URL + capi_key
+        generate(capiUrl)
+    }
+    else {
+        console.log('Function failed to execute due to authentication error')
+    }
+    
     // TEST
     // const item = await getTestItem()
     // triggerItemAudioGeneration(item)
@@ -186,6 +185,32 @@ function wrapInSSML(text) {
 // this adds artificial breaths at certain intervals
 function wrapInBreaths(text) {    
     return `<amazon:auto-breaths volume="x-soft"> ${text} </amazon:auto-breaths>`
+}
+
+async function fetchParameterStore() {
+    var param = {
+        Path: PARAM_PATH,
+        WithDecryption: true
+    };
+
+    try{
+        let data = await ssm.getParametersByPath(param).promise()
+        if(data != null) {
+            paramater_store = data.Parameters
+            console.log('Paramater retried successfully')
+            return true
+        }
+    } catch(e) {
+        console.error(e)
+    }
+
+    console.log('Failed to retried parameters')
+    return false
+}
+
+function getParam(paramName) {
+    var obj = paramater_store.find(obj => obj.Name==paramName)
+    return obj.Value
 }
 
 async function getTestItem() {
