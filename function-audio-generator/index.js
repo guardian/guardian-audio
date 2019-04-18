@@ -41,14 +41,19 @@ var paramater_store = null
 exports.handler = async (event, context, callback) => {
     console.log('starting polly ops', event)
 
-    var success = await fetchParameterStore()
-    if(success) {
-        let capi_key = getParam(KEY_CAPI_KEY)
-        let capiUrl = CAPI_URL + capi_key
-        generate(capiUrl)
-    }
-    else {
-        console.log('Function failed to execute due to authentication error')
+    try {
+        var success = await fetchParameterStore()
+        if(success) {
+            let capi_key = getParam(KEY_CAPI_KEY)
+            let capiUrl = CAPI_URL + capi_key
+            generate(capiUrl)
+        }
+        else {
+            console.log('Function failed to execute due to authentication error')
+        }
+    } catch(e) {
+        console.error('Something went wrong')
+        console.error(e)
     }
     
     // TEST
