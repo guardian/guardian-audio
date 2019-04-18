@@ -59,7 +59,9 @@ exports.handler = async (event, context, callback) => {
 }
 
 async function generate(url) {
+    console.log('Retrieving items from CAPI...')
     const data = await request.get({uri: url, json: true})
+    console.log('CAPI items fetched')
 
     for(const item of data.response.results) {
         const audioExist = await audioAlreadyGenerated(item.id)
