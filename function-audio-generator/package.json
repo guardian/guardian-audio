@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.323.0",
-    "request": "^2.87.0",
+    "request": "^2.88.2",
     "request-promise": "^4.2.2",
     "sanitize-html": "^1.19.3",
     "ssml-validator": "^0.1.0"
