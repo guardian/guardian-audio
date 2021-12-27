@@ -4,9 +4,8 @@ const request = require('request-promise')
 const sanitizeHtml = require('sanitize-html')
 const ssmlValidator = require('ssml-validator')
 
-const MAPI_HOME_FRONT_URL = 'https://mobile.guardianapis.com/uk/fronts/home'
-const SNS_TOPIC = 'TODO'
-const BUCKET_NAME = 'TODO'
+const SNS_TOPIC = 'arn:aws:sns:eu-west-1:702972749545:guardian-apps-audio'
+const BUCKET_NAME = 'guardian-apps-audio'
 const CAPI_FIELDS = 'headline,body'
 const CAPI_PAGE_SIZE = 50
 const CAPI_URL = `https://content.guardianapis.com/search?show-fields=${CAPI_FIELDS}&page-size=${CAPI_PAGE_SIZE}&api-key=`
@@ -32,8 +31,8 @@ const ssm = new aws.SSM({region: 'eu-west-1'})
 
 const ENV = 'CODE' //TODO make it dynamic
 const DB_TABLE_NAME = 'guardian-audio-' + ENV
-const PARAM_PATH = '/mobile/guardian-audio/' + ENV
-const KEY_CAPI_KEY = PARAM_PATH + '/capi.key'
+const PARAM_PATH = '/' + ENV + '/mobile/guardian-audio/'
+const KEY_CAPI_KEY = PARAM_PATH + 'capi.key'
 var paramater_store = null
 
 
