@@ -11,8 +11,6 @@ const CAPI_FIELDS = 'headline,body'
 const CAPI_PAGE_SIZE = 50
 const CAPI_URL = `https://content.guardianapis.com/search?show-fields=${CAPI_FIELDS}&page-size=${CAPI_PAGE_SIZE}&api-key=`
 
-const DB_TABLE_NAME = 'guardian-audio'
-
 const PUBLISHER = 'The Guardian'
 const LIVE_BLOG_INTRO = "This article is based on a live event, please go to the article page to get up to date information";
 const GALLERY_INTO = 'This is a gallery article, you will enjoy more by looking at the amazing photos than listening it. Thank you.'
@@ -32,7 +30,8 @@ const polly = new aws.Polly({signatureVersion: 'v4', region: 'eu-west-1'})
 const dbClient = new aws.DynamoDB.DocumentClient({region: 'eu-west-1'});
 const ssm = new aws.SSM({region: 'eu-west-1'})
 
-const ENV = 'CODE'
+const ENV = 'CODE' //TODO make it dynamic
+const DB_TABLE_NAME = 'guardian-audio-' + ENV
 const PARAM_PATH = '/mobile/guardian-audio/' + ENV
 const KEY_CAPI_KEY = PARAM_PATH + '/capi.key'
 var paramater_store = null
