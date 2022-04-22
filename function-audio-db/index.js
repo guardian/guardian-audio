@@ -10,7 +10,7 @@ const dbClient = new aws.DynamoDB.DocumentClient({apiVersion: '2012-10-08', regi
 
 
  /*
-This functions receives a sns notification when an audio generation completed and
+This functions receives a sns notification when an audio generation completes and
 then it update the DB accordingly
 */
 exports.handler = function(event, context, callback) {
