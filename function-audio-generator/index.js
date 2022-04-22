@@ -4,10 +4,9 @@ const request = require('request-promise')
 const sanitizeHtml = require('sanitize-html')
 const ssmlValidator = require('ssml-validator')
 
-const SNS_TOPIC = 'arn:aws:sns:eu-west-1:702972749545:guardian-apps-audio'
-const BUCKET_NAME = 'guardian-apps-audio'
+const SNS_TOPIC = 'arn:aws:sns:eu-west-1:201359054765:mobile-guardian-audio-code'
 const CAPI_FIELDS = 'headline,body'
-const CAPI_PAGE_SIZE = 50
+const CAPI_PAGE_SIZE = 2
 const CAPI_URL = `https://content.guardianapis.com/search?show-fields=${CAPI_FIELDS}&page-size=${CAPI_PAGE_SIZE}&api-key=`
 
 const PUBLISHER = 'The Guardian'
@@ -31,8 +30,9 @@ const ssm = new aws.SSM({region: 'eu-west-1'})
 
 const ENV = 'CODE' //TODO make it dynamic
 const DB_TABLE_NAME = 'guardian-audio-' + ENV
-const PARAM_PATH = '/' + ENV + '/mobile/guardian-audio/'
-const KEY_CAPI_KEY = PARAM_PATH + 'capi.key'
+const PARAM_PATH = '/mobile/guardian-audio/' + ENV
+const KEY_CAPI_KEY = PARAM_PATH + '/capi.key'
+const BUCKET_NAME = 'mobile-guardian-audio-' + ENV.toLowerCase()
 var paramater_store = null
 
 
@@ -92,7 +92,8 @@ function triggerItemAudioGeneration(item) {
         LexiconNames: [],
         OutputS3KeyPrefix: 'raw/',
         SnsTopicArn: SNS_TOPIC,
-        TextType: 'ssml'
+        TextType: 'ssml',
+        Engine: 'neural'
     };
 
     polly.startSpeechSynthesisTask(params, (err, data) => {
@@ -189,7 +190,9 @@ function wrapInSSML(text) {
 
 // this adds artificial breaths at certain intervals
 function wrapInBreaths(text) {    
-    return `<amazon:auto-breaths volume="x-soft"> ${text} </amazon:auto-breaths>`
+    // amazon:auto-breaths is not available with Neural engine, use it only for Standard engine
+    // return `<amazon:auto-breaths volume="x-soft"> ${text} </amazon:auto-breaths>`
+    return text
 }
 
 async function fetchParameterStore() {
@@ -202,7 +205,7 @@ async function fetchParameterStore() {
         let data = await ssm.getParametersByPath(param).promise()
         if(data != null) {
             paramater_store = data.Parameters
-            console.log('Paramater retried successfully')
+            console.log('Paramater retrieved successfully')
             return true
         }
     } catch(e) {
