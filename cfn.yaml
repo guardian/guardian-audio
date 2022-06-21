@@ -73,7 +73,7 @@ Resources:
       Handler: index.handler
       MemorySize: 128
       Role: !GetAtt ExecutionRole.Arn
-      Runtime: nodejs16.15
+      Runtime: nodejs16.x
       Timeout: 60
 
   DailyEvent:
