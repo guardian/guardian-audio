@@ -4,7 +4,7 @@ Parameters:
   Stack:
     Description: Stack name
     Type: String
-    Default: mobile-audio
+    Default: mobile
   App:
     Description: Application name
     Type: String
