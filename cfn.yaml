@@ -4,7 +4,7 @@ Parameters:
   Stack:
     Description: Stack name
     Type: String
-    Default: content-api-mobile
+    Default: mobile
   App:
     Description: Application name
     Type: String
@@ -19,7 +19,7 @@ Parameters:
   DeployBucket:
     Description: Bucket where RiffRaff uploads artifacts on deploy
     Type: String
-    Default: content-api-dist
+    Default: mobile-apps-api-dist
 Resources:
   ExecutionRole:
     Type: AWS::IAM::Role
