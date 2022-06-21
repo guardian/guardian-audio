@@ -1,11 +1,11 @@
-stacks: [content-api-mobile]
+stacks: [mobile-audio]
 regions: [eu-west-1]
 
 deployments:
   function-audio-generator:
     type: aws-lambda
     parameters:
-      bucket: content-api-dist
+      bucket: mobile-apps-api-dist
       functionNames: [function-audio-generator-]
       fileName: function-audio-generator.zip
       prefixStack: false
