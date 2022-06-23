@@ -65,7 +65,7 @@ exports.handler = async (event, context, callback) => {
 }
 
 async function generate(url) {
-    console.log('Retrieving items from CAPI')
+    console.log('Retrieving items from CAPI.')
     const response = await tiny.get({url})
     const data = response.body;
     console.log('CAPI items fetched')
