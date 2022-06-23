@@ -47,7 +47,8 @@ exports.handler = async (event, context, callback) => {
         if(success) {
             let capi_key = getParam(KEY_CAPI_KEY)
             let capiUrl = CAPI_URL + capi_key
-            generate(capiUrl)
+            await generate(capiUrl)
+            callback(null, 'success')
         }
         else {
             console.log('Function failed to execute due to authentication error')
@@ -55,6 +56,7 @@ exports.handler = async (event, context, callback) => {
     } catch(e) {
         console.error('Something went wrong')
         console.error(e)
+        callback(e)
     }
     
     // TEST
