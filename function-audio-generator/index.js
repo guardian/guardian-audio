@@ -1,6 +1,9 @@
 'use strict'
 
-const request = require('request-promise')
+// const request = require('request-promise')
+// const fetch = require('node-fetch')
+// import fetch from 'node-fetch';
+const tiny = require('tiny-json-http')
 const sanitizeHtml = require('sanitize-html')
 const ssmlValidator = require('ssml-validator')
 
@@ -62,8 +65,9 @@ exports.handler = async (event, context, callback) => {
 }
 
 async function generate(url) {
-    console.log('Retrieving items from CAPI...')
-    const data = await request.get({uri: url, json: true})
+    console.log('Retrieving items from CAPI')
+    const response = await tiny.get({url})
+    const data = response.body;
     console.log('CAPI items fetched')
 
     for(const item of data.response.results) {
