@@ -18,8 +18,7 @@
   },
   "dependencies": {
     "aws-sdk": "2.1119.0",
-    "request": "^2.87.0",
-    "request-promise": "^4.2.2",
+    "tiny-json-http": "^7.4.2",
     "sanitize-html": "^2.7.0",
     "ssml-validator": "^0.1.0"
   }
