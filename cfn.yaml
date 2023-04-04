@@ -71,12 +71,12 @@ Resources:
               - Effect: Allow,
                 Action:
                   polly:*,
-                Resource": "*"
+                Resource: "*"
               - Effect: Allow,
                 Action: s3:PutObject,
                 Resource: 
                   - !Sub arn:aws:s3:::mobile-guardian-audio-${Stage}/*
-              - Effect": Allow,
+              - Effect: Allow,
                 Action: sns:Publish,
                 Resource: arn:aws:sns:region:account:topic
   Lambda:
