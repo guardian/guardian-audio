@@ -78,7 +78,7 @@ Resources:
                   - !Sub arn:aws:s3:::mobile-guardian-audio-${Stage}/*
               - Effect: Allow,
                 Action: sns:Publish,
-                Resource: arn:aws:sns:region:account:topic
+                Resource: arn:aws:sns:${AWS::Region}:${AWS::AccountId}:mobile-guardian-audio-code
   Lambda:
     Type: AWS::Lambda::Function
     Properties:
