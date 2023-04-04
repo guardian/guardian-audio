@@ -68,16 +68,18 @@ Resources:
         - PolicyName: aws-polly
           PolicyDocument:
             Statement:
-              - Effect: Allow,
+              - Effect: Allow
                 Action:
-                  polly:*,
+                  - polly:*,
                 Resource: "*"
-              - Effect: Allow,
-                Action: s3:PutObject,
-                Resource: 
+              - Effect: Allow
+                Action: 
+                  - s3:PutObject
+                Resource:
                   - !Sub arn:aws:s3:::mobile-guardian-audio-${Stage}/*
-              - Effect: Allow,
-                Action: sns:Publish,
+              - Effect: Allow
+                Action: 
+                  - sns:Publish
                 Resource: arn:aws:sns:${AWS::Region}:${AWS::AccountId}:mobile-guardian-audio-code
   Lambda:
     Type: AWS::Lambda::Function
