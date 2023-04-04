@@ -63,7 +63,8 @@ Resources:
               Action:
                 - dynamodb:*
               Resource:
-                - !Sub arn:aws:dynamodb:eu-west-1:201359054765:table/guardian-audio-${Stage}                
+                - !Sub arn:aws:dynamodb:eu-west-1:201359054765:table/guardian-audio-${Stage}
+                - !Sub arn:aws:dynamodb:eu-west-1:201359054765:table/guardian-audio-${Stage}/index/*                
   Lambda:
     Type: AWS::Lambda::Function
     Properties:
