@@ -1,3 +1,4 @@
+---
 AWSTemplateFormatVersion: 2010-09-09
 Description: Cloud formation for Guardian Audio lambda
 Parameters:
@@ -55,7 +56,7 @@ Resources:
               Effect: Allow
               Action:
                 - ssm:GetParametersByPath
-              Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/mobile/guardian-audio/${Stage}
+              Resource: arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/mobile/guardian-audio/${Stage}
         - PolicyName: dynamo-access
           PolicyDocument:
             Statement:
@@ -63,44 +64,43 @@ Resources:
               Action:
                 - dynamodb:*
               Resource:
-                - !Sub arn:aws:dynamodb:eu-west-1:201359054765:table/guardian-audio-${Stage}
-                - !Sub arn:aws:dynamodb:eu-west-1:201359054765:table/guardian-audio-${Stage}/index/*
+                - arn:aws:dynamodb:eu-west-1:201359054765:table/guardian-audio-${Stage}
+                - arn:aws:dynamodb:eu-west-1:201359054765:table/guardian-audio-${Stage}/index/*
         - PolicyName: aws-polly
           PolicyDocument:
             Statement:
               - Effect: Allow
                 Action:
-                  - polly:*,
+                  - polly:*
                 Resource: "*"
               - Effect: Allow
-                Action: 
+                Action:
                   - s3:PutObject
                 Resource:
-                  - !Sub arn:aws:s3:::mobile-guardian-audio-${Stage}/*
+                  - arn:aws:s3:::mobile-guardian-audio-${Stage}/*
               - Effect: Allow
-                Action: 
+                Action:
                   - sns:Publish
                 Resource: arn:aws:sns:${AWS::Region}:${AWS::AccountId}:mobile-guardian-audio-code
   Lambda:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub ${App}-${Stage}
+      FunctionName: ${App}-${Stage}
       Code:
         S3Bucket:
           Ref: DeployBucket
-        S3Key: !Sub ${Stack}/${Stage}/${App}/function-audio-generator.zip
+        S3Key: ${Stack}/${Stage}/${App}/function-audio-generator.zip
       Environment:
         Variables:
-          Stage: !Ref Stage
-          Stack: !Ref Stack
-          App: !Ref App
+          Stage: Stage
+          Stack: Stack
+          App: App
       Description: Guardian Audio Lambda
       Handler: index.handler
       MemorySize: 128
-      Role: !GetAtt ExecutionRole.Arn
+      Role: ExecutionRole.Arn
       Runtime: nodejs16.x
       Timeout: 60
-
   DailyEvent:
     Type: AWS::Events::Rule
     Properties:
@@ -108,12 +108,11 @@ Resources:
       ScheduleExpression: cron(14 3 * * ? *)
       Targets:
         - Id: Lambda
-          Arn: !GetAtt Lambda.Arn
-
+          Arn: Lambda.Arn
   DailyEventLambdaPermission:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt Lambda.Arn
+      FunctionName: Lambda.Arn
       Principal: events.amazonaws.com
-      SourceArn: !GetAtt DailyEvent.Arn
+      SourceArn: DailyEvent.Arn
