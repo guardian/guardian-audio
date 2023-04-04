@@ -73,15 +73,15 @@ Resources:
                   - polly:*
                 Resource: "*"
               - Effect: Allow
-                Action: 
+                Action:
                   - s3:PutObject
                   - s3:PutObjectAcl
                 Resource:
-                  - !Sub arn:aws:s3:::mobile-guardian-audio-${Stage}/*
+                  - !Sub arn:aws:s3:::mobile-guardian-audio-code/*
               - Effect: Allow
-                Action: 
+                Action:
                   - sns:Publish
-                Resource: 
+                Resource:
                   - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:mobile-guardian-audio-code
   Lambda:
     Type: AWS::Lambda::Function
