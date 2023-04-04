@@ -64,7 +64,14 @@ Resources:
                 - dynamodb:*
               Resource:
                 - !Sub arn:aws:dynamodb:eu-west-1:201359054765:table/guardian-audio-${Stage}
-                - !Sub arn:aws:dynamodb:eu-west-1:201359054765:table/guardian-audio-${Stage}/index/*                
+                - !Sub arn:aws:dynamodb:eu-west-1:201359054765:table/guardian-audio-${Stage}/index/*
+        - PolicyName: aws-polly
+          PolicyDocument:
+            Statement:
+              Effect: Allow
+              Action:
+                - polly:*
+              Resource: "*"                
   Lambda:
     Type: AWS::Lambda::Function
     Properties:
