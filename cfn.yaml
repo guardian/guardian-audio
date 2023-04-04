@@ -75,6 +75,7 @@ Resources:
               - Effect: Allow
                 Action: 
                   - s3:PutObject
+                  - s3:PutObjectAcl
                 Resource:
                   - !Sub arn:aws:s3:::mobile-guardian-audio-${Stage}/*
               - Effect: Allow
