@@ -71,8 +71,7 @@ Resources:
               Effect: Allow
               Action:
                 - polly:*
-              Resource: "*"  
-                - PolicyName: aws-polly
+              Resource: "*"                  
         - PolicyName: s3-access
           PolicyDocument:
             Statement:
