@@ -56,6 +56,14 @@ Resources:
               Action:
                 - ssm:GetParametersByPath
               Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/mobile/guardian-audio/${Stage}
+        - PolicyName: dynamo-access
+          PolicyDocument:
+            Statement:
+              Effect: Allow
+              Action:
+                - dynamodb:*
+              Resource:
+                - !Sub arn:aws:dynamodb:eu-west-1:201359054765:table/guardian-audio-${Stage}                
   Lambda:
     Type: AWS::Lambda::Function
     Properties:
