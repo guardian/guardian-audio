@@ -74,7 +74,8 @@ Resources:
                 Resource": "*"
               - Effect: Allow,
                 Action: s3:PutObject,
-                Resource: arn:aws:s3:::bucket-name/*
+                Resource: 
+                  - !Sub arn:aws:s3:::mobile-guardian-audio-${Stage}/*
               - Effect": Allow,
                 Action: sns:Publish,
                 Resource: arn:aws:sns:region:account:topic
