@@ -7,7 +7,6 @@ const tiny = require('tiny-json-http')
 const sanitizeHtml = require('sanitize-html')
 const ssmlValidator = require('ssml-validator')
 
-const SNS_TOPIC = 'arn:aws:sns:eu-west-1:201359054765:mobile-guardian-audio-code'
 const CAPI_FIELDS = 'headline,body'
 const CAPI_PAGE_SIZE = 2
 const CAPI_URL = `https://content.guardianapis.com/search?show-fields=${CAPI_FIELDS}&page-size=${CAPI_PAGE_SIZE}&api-key=`
@@ -35,7 +34,9 @@ const ENV = 'CODE' //TODO make it dynamic
 const DB_TABLE_NAME = 'guardian-audio-' + ENV
 const PARAM_PATH = '/mobile/guardian-audio/' + ENV
 const KEY_CAPI_KEY = PARAM_PATH + '/capi.key'
-const BUCKET_NAME = 'mobile-guardian-audio-' + ENV.toLowerCase()
+const BUCKET_NAME = 'mobile-guardian-audio'
+const BUCKET_OUTPUT_PREFIX = 'raw/' + ENV + '/'
+const SNS_TOPIC = 'arn:aws:sns:eu-west-1:201359054765:mobile-guardian-audio-' + ENV
 var paramater_store = null
 
 
@@ -96,7 +97,7 @@ function triggerItemAudioGeneration(item) {
         VoiceId: 'Amy',
         LanguageCode: 'en-GB',
         LexiconNames: [],
-        OutputS3KeyPrefix: 'raw/',
+        OutputS3KeyPrefix: BUCKET_OUTPUT_PREFIX,
         SnsTopicArn: SNS_TOPIC,
         TextType: 'ssml',
         Engine: 'neural'

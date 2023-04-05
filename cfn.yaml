@@ -56,6 +56,33 @@ Resources:
               Action:
                 - ssm:GetParametersByPath
               Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/mobile/guardian-audio/${Stage}
+        - PolicyName: dynamo-access
+          PolicyDocument:
+            Statement:
+              Effect: Allow
+              Action:
+                - dynamodb:*
+              Resource:
+                - !Sub arn:aws:dynamodb:eu-west-1:201359054765:table/guardian-audio-${Stage}
+                - !Sub arn:aws:dynamodb:eu-west-1:201359054765:table/guardian-audio-${Stage}/index/*
+        - PolicyName: polly
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - polly:*
+                Resource: "*"
+              - Effect: Allow
+                Action: 
+                  - s3:PutObject
+                  - s3:PutObjectAcl
+                Resource:
+                  - !Sub arn:aws:s3:::mobile-guardian-audio/*
+              - Effect: Allow
+                Action: 
+                  - sns:Publish
+                Resource: 
+                  - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:mobile-guardian-audio-${Stage}
   Lambda:
     Type: AWS::Lambda::Function
     Properties:
