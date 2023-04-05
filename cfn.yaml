@@ -82,7 +82,7 @@ Resources:
                 Action: 
                   - sns:Publish
                 Resource: 
-                  - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:mobile-guardian-audio-code
+                  - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:mobile-guardian-audio-${Stage}
   Lambda:
     Type: AWS::Lambda::Function
     Properties:
