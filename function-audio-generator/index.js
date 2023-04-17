@@ -47,24 +47,25 @@ exports.handler = async (event, context, callback) => {
     if(typeof event == 'object' && event.hasOwnProperty('Records')) {        
         console.log('SNS msg found, type, starting DB operations')
         await dbhandler(event, context, callback)
-        return
+        callback(null, 'success')
     }
-
-    try {
-        var success = await fetchParameterStore()
-        if(success) {
-            let capi_key = getParam(KEY_CAPI_KEY)
-            let capiUrl = CAPI_URL + capi_key
-            await generate(capiUrl)
-            callback(null, 'success')
+    else {
+        try {
+            var success = await fetchParameterStore()
+            if(success) {
+                let capi_key = getParam(KEY_CAPI_KEY)
+                let capiUrl = CAPI_URL + capi_key
+                await generate(capiUrl)
+                callback(null, 'success')
+            }
+            else {
+                console.log('Function failed to execute due to authentication error')
+            }
+        } catch(e) {
+            console.error('Something went wrong')
+            console.error(e)
+            callback(e)
         }
-        else {
-            console.log('Function failed to execute due to authentication error')
-        }
-    } catch(e) {
-        console.error('Something went wrong')
-        console.error(e)
-        callback(e)
     }
     
     // TEST
