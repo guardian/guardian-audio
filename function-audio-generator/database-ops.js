@@ -40,7 +40,7 @@ async function doPostAudioCompletion(message, callback) {
         ReturnValues:"UPDATED_NEW"
     }
 
-    console.log('Updating record...')
+    console.log('Updating db record...')
     
     dbClient.update(param, (err, data) => {
         if(err) console.error(err)

@@ -46,7 +46,7 @@ exports.handler = async (event, context, callback) => {
 
     if(typeof event == 'object' && event.hasOwnProperty('Records')) {        
         console.log('SNS msg found, type, starting DB operations')
-        dbhandler(event, context, callback)
+        await dbhandler(event, context, callback)
         return
     }
 
