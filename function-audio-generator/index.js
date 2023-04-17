@@ -26,6 +26,7 @@ const REGEX_PARA_START = /<p>/gm
 const REGEX_PARA_END = /<\/p>/gm
 
 const aws = require('aws-sdk')
+const { dbhandler } = require('./database-ops')
 const polly = new aws.Polly({signatureVersion: 'v4', region: 'eu-west-1'})
 const dbClient = new aws.DynamoDB.DocumentClient({region: 'eu-west-1'});
 const ssm = new aws.SSM({region: 'eu-west-1'})
@@ -42,6 +43,13 @@ var paramater_store = null
 
 exports.handler = async (event, context, callback) => {
     console.log('starting polly ops', event)
+
+    if(typeof event == 'object' && event.hasOwnProperty('Records')) {
+        var message = JSON.parse(event.Records[0].Sns.Message);
+        console.log('SNS msg found, type:' + typeof message)
+        dbhandler(event, context, callback)
+        return
+    }
 
     try {
         var success = await fetchParameterStore()
