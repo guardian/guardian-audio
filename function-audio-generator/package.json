@@ -11,7 +11,7 @@
     "package": "node-lambda package",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Mohammad Haque",
   "license": "ISC",
   "devDependencies": {
     "node-lambda": "^0.22.0"
@@ -20,6 +20,7 @@
     "aws-sdk": "2.1119.0",
     "tiny-json-http": "^7.4.2",
     "sanitize-html": "^2.7.0",
-    "ssml-validator": "^0.1.0"
+    "ssml-validator": "^0.1.0",
+    "url": "^0.11.0"
   }
 }
