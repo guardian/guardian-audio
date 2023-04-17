@@ -24,7 +24,7 @@ async function doPostAudioCompletion(message, callback) {
 
     // For simpler DB query we are storing just two possible values in DynamoDB
     // Actual possible values are: scheduled | inProgress | completed | failed.
-    const newStatus = message.taskStatus == 'COMPLETED' ? 'completed' : 'scheduled'
+    const newStatus = String(message.taskStatus).toLowerCase()
     var param = {
         TableName: DB_TABLE_NAME,
         Key: {
