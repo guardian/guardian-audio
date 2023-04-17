@@ -44,9 +44,8 @@ var paramater_store = null
 exports.handler = async (event, context, callback) => {
     console.log('starting polly ops', event)
 
-    if(typeof event == 'object' && event.hasOwnProperty('Records')) {
-        var message = JSON.parse(event.Records[0].Sns.Message);
-        console.log('SNS msg found, type:' + typeof message)
+    if(typeof event == 'object' && event.hasOwnProperty('Records')) {        
+        console.log('SNS msg found, type, starting DB operations')
         dbhandler(event, context, callback)
         return
     }

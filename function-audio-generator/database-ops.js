@@ -11,6 +11,7 @@ const dbClient = new aws.DynamoDB.DocumentClient({apiVersion: '2012-10-08', regi
 
 exports.dbhandler = async (event, context, callback) => {
     console.log('DATABASE ops is running with ' + JSON.stringify(event))
+    var message = JSON.parse(event.Records[0].Sns.Message);
     doPostAudioCompletion(message, callback)
 }
 
