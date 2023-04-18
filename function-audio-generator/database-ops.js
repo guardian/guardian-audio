@@ -4,9 +4,10 @@ const aws = require('aws-sdk')
 const s3 = new aws.S3()
 const URL = require('url').URL
 
-const DB_TABLE_NAME = 'guardian-audio'
+const ENV = 'CODE' //TODO make it dynamic
+const DB_TABLE_NAME = 'guardian-audio-' + ENV
 const BUCKET_NAME = 'mobile-guardian-audio'
-const dbClient = new aws.DynamoDB.DocumentClient({apiVersion: '2012-10-08', region: 'eu-west-1'})
+const dbClient = new aws.DynamoDB.DocumentClient({region: 'eu-west-1'});
 
 
 exports.dbhandler = async (event, context, callback) => {
@@ -59,7 +60,7 @@ async function copyAudioToCleanFolder(message) {
     }
 
     const currentAudioFile = message.outputUri.split('s3:/')[1] // remove the schema and take bucket name along file name    
-    const newFileName = 'clean/' + item.item_id + '.mp3'
+    const newFileName = 'clean/' + ENV + '/' + item.item_id + '.mp3'
     var copyParam = {
         Bucket: BUCKET_NAME,
         Key: newFileName,
@@ -72,11 +73,11 @@ async function copyAudioToCleanFolder(message) {
     console.log('Successfully copied audio to clean folder')
 
     // Now upload a json file with audio url and some metadata
-    const publicAudioUrl = new URL(item.raw_audio_url).origin + '/' + BUCKET_NAME + '/clean/' + item.item_id + '.mp3'
+    const publicAudioUrl = new URL(item.raw_audio_url).origin + '/' + BUCKET_NAME + '/clean/' + ENV + '/' + item.item_id + '.mp3'
     const data = {'audioUrl': publicAudioUrl, 'durationInSec': -1} // TODO fix duration
     const param = {
         Bucket: BUCKET_NAME,
-        Key: 'clean/' + item.item_id + '.json',
+        Key: 'clean/' + ENV + '/' + item.item_id + '.json',
         ACL: 'public-read',
         Body: JSON.stringify(data),
         ContentType: 'application/json'
