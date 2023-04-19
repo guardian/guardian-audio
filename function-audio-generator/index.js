@@ -44,28 +44,28 @@ var paramater_store = null
 exports.handler = async (event, context, callback) => {
     console.log('starting polly ops', event)
 
-    if(typeof event == 'object' && event.hasOwnProperty('Records')) {        
-        console.log('SNS msg found, type, starting DB operations')
-        await dbhandler(event, context, callback)
-        callback(null, 'success')
-    }
-    else {
-        try {
-            var success = await fetchParameterStore()
-            if(success) {
-                let capi_key = getParam(KEY_CAPI_KEY)
-                let capiUrl = CAPI_URL + capi_key
-                await generate(capiUrl)
-                callback(null, 'success')
-            }
-            else {
-                console.log('Function failed to execute due to authentication error')
-            }
-        } catch(e) {
-            console.error('Something went wrong')
-            console.error(e)
-            callback(e)
+    try {
+        if(typeof event == 'object' && event.hasOwnProperty('Records')) {        
+            console.log('SNS msg found, type, starting DB operations')
+            await dbhandler(event, context, callback)
         }
+        else {
+
+                var success = await fetchParameterStore()
+                if(success) {
+                    let capi_key = getParam(KEY_CAPI_KEY)
+                    let capiUrl = CAPI_URL + capi_key
+                    await generate(capiUrl)
+                    callback(null, 'success')
+                }
+                else {
+                    console.log('Function failed to execute due to authentication error')
+                }
+        }
+    } catch(e) {
+        console.error('Something went wrong')
+        console.error(e)
+        callback(e)
     }
     
     // TEST
