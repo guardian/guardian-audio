@@ -8,7 +8,7 @@ const sanitizeHtml = require('sanitize-html')
 const ssmlValidator = require('ssml-validator')
 
 const CAPI_FIELDS = 'headline,body'
-const CAPI_PAGE_SIZE = 2
+const CAPI_PAGE_SIZE = 20
 const CAPI_URL = `https://content.guardianapis.com/search?show-fields=${CAPI_FIELDS}&page-size=${CAPI_PAGE_SIZE}&api-key=`
 
 const PUBLISHER = 'The Guardian'
