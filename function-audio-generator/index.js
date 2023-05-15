@@ -20,6 +20,7 @@ const INTERACTIVE_INTRO = "This is an interactive article and it is better in se
 
 const AUDIO_PAUSE = '<break strength="x-strong" />'
 const AUDIO_PAUSE_1S = '<break time="1s" />'
+const AUDIO_PAUSE_2S = '<break time="2s" />'
 const REGEX_RELATED_CONTENT = /<span>(\s?)Related:(\s?)<\/span>(<a href=)(.+?)(<\/a>)/gm;
 const REGEX_VIDEO_EMBED = /(__VIDEO_EMBED_)(.+?)(__)/gm
 const REGEX_PARA_START = /<p>/gm
@@ -95,7 +96,7 @@ async function generate(url) {
 function triggerItemAudioGeneration(item) {
     const headline = getHeadlineText(item.fields.headline)
     const body = getBody(item)
-    const fullText = wrapInSSML(`${headline} ${AUDIO_PAUSE_1S} ${body}`)
+    const fullText = wrapInSSML(`${headline} ${AUDIO_PAUSE_1S} ${body} ${AUDIO_PAUSE_2S}`)
     const ssmlFriendlyText = ssmlValidator.correct(fullText)
     
     var params = {
