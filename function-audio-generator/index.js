@@ -8,7 +8,7 @@ const sanitizeHtml = require('sanitize-html')
 const ssmlValidator = require('ssml-validator')
 
 const CAPI_FIELDS = 'headline,body'
-const CAPI_PAGE_SIZE = 2
+const CAPI_PAGE_SIZE = 20
 const CAPI_URL = `https://content.guardianapis.com/search?show-fields=${CAPI_FIELDS}&page-size=${CAPI_PAGE_SIZE}&api-key=`
 
 const PUBLISHER = 'The Guardian'
@@ -20,12 +20,14 @@ const INTERACTIVE_INTRO = "This is an interactive article and it is better in se
 
 const AUDIO_PAUSE = '<break strength="x-strong" />'
 const AUDIO_PAUSE_1S = '<break time="1s" />'
+const AUDIO_PAUSE_2S = '<break time="2s" />'
 const REGEX_RELATED_CONTENT = /<span>(\s?)Related:(\s?)<\/span>(<a href=)(.+?)(<\/a>)/gm;
 const REGEX_VIDEO_EMBED = /(__VIDEO_EMBED_)(.+?)(__)/gm
 const REGEX_PARA_START = /<p>/gm
 const REGEX_PARA_END = /<\/p>/gm
 
 const aws = require('aws-sdk')
+const { dbhandler } = require('./database-ops')
 const polly = new aws.Polly({signatureVersion: 'v4', region: 'eu-west-1'})
 const dbClient = new aws.DynamoDB.DocumentClient({region: 'eu-west-1'});
 const ssm = new aws.SSM({region: 'eu-west-1'})
@@ -44,15 +46,22 @@ exports.handler = async (event, context, callback) => {
     console.log('starting polly ops', event)
 
     try {
-        var success = await fetchParameterStore()
-        if(success) {
-            let capi_key = getParam(KEY_CAPI_KEY)
-            let capiUrl = CAPI_URL + capi_key
-            await generate(capiUrl)
-            callback(null, 'success')
+        if(typeof event == 'object' && event.hasOwnProperty('Records')) {        
+            console.log('SNS msg found, type, starting DB operations')
+            await dbhandler(event, context, callback)
         }
         else {
-            console.log('Function failed to execute due to authentication error')
+
+                var success = await fetchParameterStore()
+                if(success) {
+                    let capi_key = getParam(KEY_CAPI_KEY)
+                    let capiUrl = CAPI_URL + capi_key
+                    await generate(capiUrl)
+                    callback(null, 'success')
+                }
+                else {
+                    console.log('Function failed to execute due to authentication error')
+                }
         }
     } catch(e) {
         console.error('Something went wrong')
@@ -87,7 +96,7 @@ async function generate(url) {
 function triggerItemAudioGeneration(item) {
     const headline = getHeadlineText(item.fields.headline)
     const body = getBody(item)
-    const fullText = wrapInSSML(`${headline} ${AUDIO_PAUSE_1S} ${body}`)
+    const fullText = wrapInSSML(`${headline} ${AUDIO_PAUSE_1S} ${body} ${AUDIO_PAUSE_2S}`)
     const ssmlFriendlyText = ssmlValidator.correct(fullText)
     
     var params = {
